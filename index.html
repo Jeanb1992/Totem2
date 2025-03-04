@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <title>Tótem Interactivo</title>
+        
+        <!-- PWA Meta Tags -->
+        <meta name="theme-color" content="#000000">
+        <meta name="description" content="Aplicación interactiva con formulario de texto">
+        <link rel="manifest" href="manifest.json">
+        <link rel="icon" type="image/png" sizes="192x192" href="src/img/icon-192.png">
+        <link rel="apple-touch-icon" href="src/img/icon-192.png">
+        
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                width: 100vw;
+                height: 100vh;
+                background-color: #000;
+                overflow: hidden;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .container {
+                width: 100%;
+                height: 100%;
+                position: relative;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                overflow: hidden;
+            }
+
+            .background-image {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+            }
+
+            .botones-container {
+                position: absolute;
+                bottom: 8%;
+                left: 83%;
+                transform: translateX(-50%);
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 2vw;
+                width: 10%;
+                max-width: 1800px;
+            }
+
+            .boton {
+                position: relative;
+                cursor: pointer;
+                transition: transform 0.2s;
+                width: 15%;
+                max-width: 280px;
+                min-width: 180px;
+                height: auto;
+                display: block;
+            }
+
+            .button-1, .button-2, .button-3, .button-4 {
+                width: 15%;
+                max-width: 280px;
+                min-width: 180px;
+            }
+
+            .button-5 {
+                width: 18%;
+                max-width: 320px;
+                min-width: 220px;
+                position: absolute;
+            }
+
+            .form-container {
+                display: none;
+                position: fixed;
+                top: 83%;
+                left: 33%;
+                transform: translate(-50%, -50%);
+                background: rgba(255, 255, 255, 0.95);
+                padding: 30px;
+                border-radius: 15px;
+                width: 60%;
+                max-width: 700px;
+                z-index: 1000;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                position: absolute;
+            }
+
+            .close-button {
+                position: absolute;
+                top: -10px;
+                right: -10px;
+                width: 25px;
+                height: 25px;
+                border-radius: 5px;
+                background: #ff4444;
+                color: white;
+                border: none;
+                cursor: pointer;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 16px;
+                font-weight: bold;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                line-height: 0;
+                padding: 0;
+            }
+
+            .close-button:hover {
+                background: #cc0000;
+                transform: scale(1.1);
+            }
+
+            .form-container textarea {
+                width: 100%;
+                min-height: 200px;
+                margin-bottom: 20px;
+                
+                border: 2px solid #ccc;
+                border-radius: 8px;
+                font-size: 18px;
+                resize: vertical;
+                
+            }
+
+            .form-container button {
+                background-color: #007bff;
+                color: white;
+                border: none;
+                padding: 15px 30px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 18px;
+                font-weight: bold;
+                width: 100%;
+                max-width: 200px;
+                display: block;
+                margin: 0 auto;
+            }
+
+            .form-container button:hover {
+                background-color: #0056b3;
+                transform: scale(1.05);
+            }
+
+            .boton:hover {
+                transform: scale(1.1);
+            }
+            #botonFormulario {
+               position: absolute;
+               bottom: 9%;
+               left: 25%;
+            }
+            #closeForm {
+                width: 5%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                padding-bottom: 2px;
+            }
+
+            /* Para tablets en modo landscape (1920x1200) */
+            @media screen and (min-width: 1920px) {
+                .background-image {
+                    height: 100vh;
+                    width: 100vw;
+                    object-fit: cover;
+                }
+
+                .botones-container {
+                    bottom: 6%;
+                    gap: 1vw;
+                }
+
+                .boton {
+                    width: 16%;
+                    max-width: 300px;
+                    min-width: 200px;
+                }
+            }
+
+            /* Para tablets en modo portrait */
+            @media screen and (max-width: 1200px) {
+                .background-image {
+                    height: 100vh;
+                    width: auto;
+                    max-width: none;
+                }
+
+                .botones-container {
+                    bottom: 10%;
+                    gap: 2vw;
+                }
+
+                .boton {
+                    width: 14%;
+                    max-width: 260px;
+                    min-width: 160px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <img src="src/img/Recurso 10.png" alt="Fondo Tótem" class="background-image">
+            <div class="botones-container">
+                <a href="pdf1.html"><img src="src/img/Recurso 5.png" alt="Tótem Interactivo" class="boton"></a>
+                <a href="pdf2.html"><img src="src/img/Recurso 2.png" alt="Tótem Interactivo" class="boton"></a>
+                <a href="pdf3.html"><img src="src/img/Recurso 4.png" alt="Tótem Interactivo" class="boton"></a>
+                <a href="pdf4.html"><img src="src/img/Recurso 3.png" alt="Tótem Interactivo" class="boton"></a>
+                
+            </div>
+            <img src="src/img/Recurso 6.png" alt="Abrir Formulario" class="boton" id="botonFormulario">
+        </div>
+
+        <div class="form-container" id="formContainer">
+            <button class="close-button" id="closeForm">×</button>
+            <textarea id="userResponse" placeholder="Escribe tu respuesta aquí..."></textarea>
+            <button id="submitResponse">Enviar Respuesta</button>
+        </div>
+
+        <script>
+            const botonFormulario = document.getElementById('botonFormulario');
+            const formContainer = document.getElementById('formContainer');
+            const submitButton = document.getElementById('submitResponse');
+            const textarea = document.getElementById('userResponse');
+            const closeButton = document.getElementById('closeForm');
+            
+            botonFormulario.addEventListener('click', () => {
+                formContainer.style.display = 'block';
+                textarea.focus();
+            });
+
+            closeButton.addEventListener('click', () => {
+                formContainer.style.display = 'none';
+                textarea.value = '';
+            });
+
+            submitButton.addEventListener('click', () => {
+                const respuesta = textarea.value.trim();
+                if (respuesta) {
+                    const fecha = new Date();
+                    try {
+                        // Crear el contenido de la nueva respuesta
+                        const nuevaRespuesta = `\n\n--- Respuesta ${fecha.toLocaleString()} ---\n${respuesta}`;
+                        
+                        // Crear un Blob con el contenido
+                        const blob = new Blob([nuevaRespuesta], { type: 'text/plain' });
+                        
+                        // Crear un enlace temporal para la descarga
+                        const link = document.createElement('a');
+                        link.href = URL.createObjectURL(blob);
+                        link.download = 'respuestas_usuario.txt';
+                        
+                        // Simular clic y limpiar
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        URL.revokeObjectURL(link.href);
+
+                        // Limpiar y cerrar el formulario
+                        textarea.value = '';
+                        formContainer.style.display = 'none';
+                    } catch (error) {
+                        console.error('Error al guardar la respuesta:', error);
+                        alert('Hubo un error al guardar la respuesta. Por favor, intente nuevamente.');
+                    }
+                } else {
+                    alert('Por favor, escribe una respuesta antes de enviar');
+                }
+            });
+        </script>
+
+        <!-- Service Worker Registration -->
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('/sw.js')
+                        .then(registration => {
+                            console.log('Service Worker registrado con éxito:', registration);
+                        })
+                        .catch(error => {
+                            console.log('Error al registrar el Service Worker:', error);
+                        });
+                });
+            }
+        </script>
+    </body>
+</html>

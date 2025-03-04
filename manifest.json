@@ -1,0 +1,23 @@
+{
+    "id": "TotemInteractivo",
+    "name": "Tótem Interactivo",
+    "short_name": "Tótem",
+    "description": "Aplicación interactiva con información y grabación de audio",
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "#000000",
+    "theme_color": "#000000",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "src/img/192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "src/img/512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+} 
