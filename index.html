@@ -44,27 +44,34 @@
 
             .botones-container {
                 position: absolute;
-                bottom: 8%;
+                top: 50%;
+                transform: translate(-50%, -50%);
                 left: 83%;
-                transform: translateX(-50%);
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                gap: 2vw;
-                width: 10%;
-                max-width: 1800px;
+                gap: 2vh;
+                width: 15%;
+                max-width: 300px;
+                height: 80vh;
+                padding: 2vh 0;
             }
 
             .boton {
                 position: relative;
                 cursor: pointer;
                 transition: transform 0.2s;
-                width: 15%;
-                max-width: 280px;
-                min-width: 180px;
+                width: 100%;
                 height: auto;
                 display: block;
+                max-height: 18vh;
+            }
+
+            .boton img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
             }
 
             .button-1, .button-2, .button-3, .button-4 {
@@ -159,8 +166,12 @@
             }
             #botonFormulario {
                position: absolute;
-               bottom: 9%;
+               top: 50%;
+               transform: translateY(-50%);
                left: 25%;
+               width: 15%;
+               max-width: 280px;
+               max-height: 18vh;
             }
             #closeForm {
                 width: 5%;
@@ -180,14 +191,18 @@
                 }
 
                 .botones-container {
-                    bottom: 6%;
-                    gap: 1vw;
+                    gap: 3vh;
+                    width: 13%;
+                    height: 85vh;
                 }
 
                 .boton {
-                    width: 16%;
-                    max-width: 300px;
-                    min-width: 200px;
+                    max-height: 20vh;
+                }
+
+                #botonFormulario {
+                    width: 13%;
+                    max-height: 20vh;
                 }
             }
 
@@ -200,14 +215,19 @@
                 }
 
                 .botones-container {
-                    bottom: 10%;
-                    gap: 2vw;
+                    gap: 2.5vh;
+                    width: 18%;
+                    height: 75vh;
                 }
 
                 .boton {
-                    width: 14%;
-                    max-width: 260px;
-                    min-width: 160px;
+                    max-height: 16vh;
+                }
+
+                #botonFormulario {
+                    width: 18%;
+                    left: 20%;
+                    max-height: 16vh;
                 }
             }
         </style>
@@ -216,11 +236,10 @@
         <div class="container">
             <img src="src/img/Recurso 10.png" alt="Fondo Tótem" class="background-image">
             <div class="botones-container">
-                <a href="pdf1.html"><img src="src/img/Recurso 5.png" alt="Tótem Interactivo" class="boton"></a>
-                <a href="pdf2.html"><img src="src/img/Recurso 2.png" alt="Tótem Interactivo" class="boton"></a>
-                <a href="pdf3.html"><img src="src/img/Recurso 4.png" alt="Tótem Interactivo" class="boton"></a>
-                <a href="pdf4.html"><img src="src/img/Recurso 3.png" alt="Tótem Interactivo" class="boton"></a>
-                
+                <a href="pdf1.html" class="boton"><img src="src/img/Recurso 5.png" alt="Tótem Interactivo"></a>
+                <a href="pdf2.html" class="boton"><img src="src/img/Recurso 2.png" alt="Tótem Interactivo"></a>
+                <a href="pdf3.html" class="boton"><img src="src/img/Recurso 4.png" alt="Tótem Interactivo"></a>
+                <a href="pdf4.html" class="boton"><img src="src/img/Recurso 3.png" alt="Tótem Interactivo"></a>
             </div>
             <img src="src/img/Recurso 6.png" alt="Abrir Formulario" class="boton" id="botonFormulario">
         </div>
