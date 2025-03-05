@@ -96,14 +96,81 @@
                 height: auto;
             }
         }
+
+        /* Estilo para pantalla completa */
+        :fullscreen {
+            background-color: #000;
+        }
+
+        :-webkit-full-screen {
+            background-color: #000;
+        }
+
+        :-moz-full-screen {
+            background-color: #000;
+        }
     </style>
 </head>
 <body>
-    <div class="pdf-viewer-container">
+    <div class="pdf-viewer-container" id="container">
         <img src="src/img/pdfs/Fatiga-1.png" alt="Fatiga" class="pdf-viewer-page">
     </div>
-    <a href="index.html">
+    <a href="index.html" onclick="handleNavigation(event, 'index.html')">
         <img src="src/img/Recurso 8.png" alt="Volver al inicio" class="pdf-home-button">
     </a>
+
+    <script>
+        // Función para entrar en pantalla completa
+        async function requestFullScreen() {
+            if (!document.fullscreenElement &&
+                !document.mozFullScreenElement &&
+                !document.webkitFullscreenElement &&
+                !document.msFullscreenElement) {
+                try {
+                    await document.documentElement.requestFullscreen();
+                } catch (err) {
+                    console.log('Error al intentar pantalla completa:', err);
+                }
+            }
+        }
+
+        // Intentar entrar en pantalla completa al cargar si estaba activa antes
+        window.addEventListener('DOMContentLoaded', async () => {
+            if (sessionStorage.getItem('isFullscreen') === 'true') {
+                await requestFullScreen();
+            }
+        });
+
+        // Función para manejar la navegación
+        async function handleNavigation(event, url) {
+            event.preventDefault();
+            
+            // Guardar el estado actual de pantalla completa
+            const isFullscreen = !!document.fullscreenElement;
+            sessionStorage.setItem('isFullscreen', isFullscreen);
+            
+            // Navegar a la nueva URL
+            window.location.href = url;
+        }
+
+        // Detectar doble toque para alternar pantalla completa
+        let lastTap = 0;
+        document.addEventListener('touchend', function(event) {
+            const currentTime = new Date().getTime();
+            const tapLength = currentTime - lastTap;
+            
+            if (tapLength < 500 && tapLength > 0) {
+                event.preventDefault();
+                if (document.fullscreenElement) {
+                    document.exitFullscreen();
+                    sessionStorage.setItem('isFullscreen', false);
+                } else {
+                    requestFullScreen();
+                    sessionStorage.setItem('isFullscreen', true);
+                }
+            }
+            lastTap = currentTime;
+        });
+    </script>
 </body>
 </html> 

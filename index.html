@@ -259,16 +259,29 @@
                     min-width: 450px;
                 }
             }
+
+            /* Estilo para pantalla completa */
+            :fullscreen {
+                background-color: #000;
+            }
+
+            :-webkit-full-screen {
+                background-color: #000;
+            }
+
+            :-moz-full-screen {
+                background-color: #000;
+            }
         </style>
     </head>
     <body>
         <div class="container">
             <img src="src/img/Recurso 10.png" alt="Fondo Tótem" class="background-image">
             <div class="botones-container">
-                <a href="pdf1.html" class="boton"><img src="src/img/Recurso 5.png" alt="Tótem Interactivo"></a>
-                <a href="pdf2.html" class="boton"><img src="src/img/Recurso 2.png" alt="Tótem Interactivo"></a>
-                <a href="pdf3.html" class="boton"><img src="src/img/Recurso 4.png" alt="Tótem Interactivo"></a>
-                <a href="pdf4.html" class="boton"><img src="src/img/Recurso 3.png" alt="Tótem Interactivo"></a>
+                <a href="pdf1.html" class="boton" onclick="handleNavigation(event, 'pdf1.html')"><img src="src/img/Recurso 5.png" alt="Tótem Interactivo"></a>
+                <a href="pdf2.html" class="boton" onclick="handleNavigation(event, 'pdf2.html')"><img src="src/img/Recurso 2.png" alt="Tótem Interactivo"></a>
+                <a href="pdf3.html" class="boton" onclick="handleNavigation(event, 'pdf3.html')"><img src="src/img/Recurso 4.png" alt="Tótem Interactivo"></a>
+                <a href="pdf4.html" class="boton" onclick="handleNavigation(event, 'pdf4.html')"><img src="src/img/Recurso 3.png" alt="Tótem Interactivo"></a>
             </div>
             <img src="src/img/Recurso 6.png" alt="Abrir Formulario" class="boton" id="botonFormulario">
         </div>
@@ -286,6 +299,40 @@
             const textarea = document.getElementById('userResponse');
             const closeButton = document.getElementById('closeForm');
             
+            // Función para entrar en pantalla completa
+            async function requestFullScreen() {
+                if (!document.fullscreenElement &&
+                    !document.mozFullScreenElement &&
+                    !document.webkitFullscreenElement &&
+                    !document.msFullscreenElement) {
+                    try {
+                        await document.documentElement.requestFullscreen();
+                    } catch (err) {
+                        console.log('Error al intentar pantalla completa:', err);
+                    }
+                }
+            }
+
+            // Intentar entrar en pantalla completa al cargar si estaba activa antes
+            window.addEventListener('DOMContentLoaded', async () => {
+                if (sessionStorage.getItem('isFullscreen') === 'true') {
+                    await requestFullScreen();
+                }
+            });
+
+            // Función para manejar la navegación
+            async function handleNavigation(event, url) {
+                event.preventDefault();
+                
+                // Guardar el estado actual de pantalla completa
+                const isFullscreen = !!document.fullscreenElement;
+                sessionStorage.setItem('isFullscreen', isFullscreen);
+                
+                // Navegar a la nueva URL
+                window.location.href = url;
+            }
+
+            // Resto del código del formulario
             botonFormulario.addEventListener('click', () => {
                 formContainer.style.display = 'block';
                 textarea.focus();
@@ -301,24 +348,15 @@
                 if (respuesta) {
                     const fecha = new Date();
                     try {
-                        // Crear el contenido de la nueva respuesta
                         const nuevaRespuesta = `\n\n--- Respuesta ${fecha.toLocaleString()} ---\n${respuesta}`;
-                        
-                        // Crear un Blob con el contenido
                         const blob = new Blob([nuevaRespuesta], { type: 'text/plain' });
-                        
-                        // Crear un enlace temporal para la descarga
                         const link = document.createElement('a');
                         link.href = URL.createObjectURL(blob);
                         link.download = 'respuestas_usuario.txt';
-                        
-                        // Simular clic y limpiar
                         document.body.appendChild(link);
                         link.click();
                         document.body.removeChild(link);
                         URL.revokeObjectURL(link.href);
-
-                        // Limpiar y cerrar el formulario
                         textarea.value = '';
                         formContainer.style.display = 'none';
                     } catch (error) {
@@ -328,6 +366,25 @@
                 } else {
                     alert('Por favor, escribe una respuesta antes de enviar');
                 }
+            });
+
+            // Detectar doble toque para alternar pantalla completa
+            let lastTap = 0;
+            document.addEventListener('touchend', function(event) {
+                const currentTime = new Date().getTime();
+                const tapLength = currentTime - lastTap;
+                
+                if (tapLength < 500 && tapLength > 0) {
+                    event.preventDefault();
+                    if (document.fullscreenElement) {
+                        document.exitFullscreen();
+                        sessionStorage.setItem('isFullscreen', false);
+                    } else {
+                        requestFullScreen();
+                        sessionStorage.setItem('isFullscreen', true);
+                    }
+                }
+                lastTap = currentTime;
             });
         </script>
 
