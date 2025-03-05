@@ -1,5 +1,5 @@
 const CACHE_NAME = 'totem-v2';
-const BASE_URL = 'https://jeanb1992.github.io/Totem2';
+const BASE_URL = '@https://jeanb1992.github.io/Totem2';
 const ASSETS = [
     `${BASE_URL}/`,
     `${BASE_URL}/index.html`,
