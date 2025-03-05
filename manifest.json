@@ -3,11 +3,12 @@
     "short_name": "Tótem",
     "description": "Aplicación interactiva con formulario de texto y visualización de PDFs",
     "start_url": "/",
-    "display": "standalone",
+    "display": "fullscreen",
     "background_color": "#000000",
     "theme_color": "#000000",
-    "orientation": "any",
+    "orientation": "portrait",
     "categories": ["business", "productivity"],
+    "display_override": ["fullscreen"],
     "icons": [
         {
             "src": "src/img/192.png",
@@ -53,5 +54,15 @@
     "lang": "es",
     "dir": "ltr",
     "prefer_related_applications": false,
-    "display_override": ["standalone", "fullscreen"]
+    "related_applications": [
+        {
+            "platform": "play",
+            "url": "https://play.google.com/store/apps/details?id=com.totem.app",
+            "id": "com.totem.app"
+        }
+    ],
+    "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7",
+    "edge_side_panel": {
+        "preferred_width": 480
+    }
 } 
