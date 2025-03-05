@@ -1,4 +1,4 @@
-const CACHE_NAME = 'totem-v1';
+const CACHE_NAME = 'totem-v2';
 const ASSETS = [
     './',
     './index.html',
@@ -22,76 +22,95 @@ const ASSETS = [
     './src/img/pdfs/Salud-1.png'
 ];
 
-// Instalación del Service Worker
+// Pre-caché de recursos durante la instalación
 self.addEventListener('install', (event) => {
     event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then((cache) => {
-                console.log('Cache abierto');
-                return cache.addAll(ASSETS);
+        Promise.all([
+            // Forzar la activación inmediata
+            self.skipWaiting(),
+            // Abrir y cachear todos los recursos
+            caches.open(CACHE_NAME).then((cache) => {
+                console.log('Pre-cacheando recursos...');
+                return cache.addAll(ASSETS).then(() => {
+                    console.log('Todos los recursos han sido cacheados');
+                }).catch((error) => {
+                    console.error('Error cacheando recursos:', error);
+                });
             })
-            .then(() => {
-                return self.skipWaiting();
-            })
-            .catch((error) => {
-                console.error('Error en la instalación:', error);
-            })
+        ])
     );
 });
 
-// Activación y limpieza de caches antiguos
+// Limpiar caches antiguos durante la activación
 self.addEventListener('activate', (event) => {
     event.waitUntil(
-        caches.keys().then((cacheNames) => {
-            return Promise.all(
-                cacheNames.map((cacheName) => {
-                    if (cacheName !== CACHE_NAME) {
-                        console.log('Eliminando cache antiguo:', cacheName);
-                        return caches.delete(cacheName);
-                    }
-                })
-            );
-        }).then(() => {
-            console.log('Cache actualizado y limpio');
-            return self.clients.claim();
+        Promise.all([
+            // Tomar control inmediatamente
+            self.clients.claim(),
+            // Limpiar caches antiguos
+            caches.keys().then((cacheNames) => {
+                return Promise.all(
+                    cacheNames.map((cacheName) => {
+                        if (cacheName !== CACHE_NAME) {
+                            console.log('Eliminando cache antiguo:', cacheName);
+                            return caches.delete(cacheName);
+                        }
+                    })
+                );
+            })
+        ]).then(() => {
+            console.log('Service Worker activo y controlando la aplicación');
         })
     );
 });
 
-// Estrategia de cache: Cache First, fallback to Network
+// Estrategia de cache: Cache First con fallback a Network
 self.addEventListener('fetch', (event) => {
     event.respondWith(
         caches.match(event.request)
-            .then((response) => {
-                if (response) {
-                    return response; // Cache hit
+            .then((cachedResponse) => {
+                // Si encontramos una coincidencia en el cache, la devolvemos
+                if (cachedResponse) {
+                    return cachedResponse;
                 }
+
+                // Si no está en cache, intentamos obtenerlo de la red
                 return fetch(event.request)
-                    .then((response) => {
-                        // Check if we received a valid response
-                        if (!response || response.status !== 200 || response.type !== 'basic') {
-                            return response;
+                    .then((networkResponse) => {
+                        // Si la respuesta de red no es válida, devolvemos un error
+                        if (!networkResponse || networkResponse.status !== 200) {
+                            throw new Error('Respuesta de red no válida');
                         }
 
-                        // Clone the response
-                        const responseToCache = response.clone();
-
+                        // Guardamos una copia de la respuesta en el cache
+                        const responseToCache = networkResponse.clone();
                         caches.open(CACHE_NAME)
                             .then((cache) => {
                                 cache.put(event.request, responseToCache);
+                                console.log('Recurso cacheado:', event.request.url);
                             });
 
-                        return response;
+                        return networkResponse;
                     })
-                    .catch(() => {
-                        // Si falla todo, intentamos servir una página offline
+                    .catch((error) => {
+                        console.error('Error de fetch:', error);
+                        
+                        // Si es una navegación, devolvemos index.html
                         if (event.request.mode === 'navigate') {
                             return caches.match('./index.html');
                         }
-                        return new Response('Error de red', {
-                            status: 404,
-                            statusText: 'Not Found'
-                        });
+
+                        // Para otros recursos, devolvemos un error personalizado
+                        return new Response(
+                            'Aplicación en modo offline - Recurso no disponible',
+                            {
+                                status: 503,
+                                statusText: 'Service Unavailable',
+                                headers: new Headers({
+                                    'Content-Type': 'text/plain'
+                                })
+                            }
+                        );
                     });
             })
     );
